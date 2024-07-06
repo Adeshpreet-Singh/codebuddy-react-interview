@@ -1,7 +1,20 @@
 import { Icon } from "@iconify/react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Posts = () => {
+  const [posts, setPosts] = useState([]);
+  console.log(posts);
+  useEffect(() => {
+    const getPosts = () => {
+      fetch("https://codebuddy.review/posts")
+        .then((response) => response.json())
+        .then((result) => setPosts(result.data));
+    };
+
+    getPosts();
+  }, []);
+
   return (
     <div className="rounded-lg bg-gray-50 p-7 text-gray-900 shadow-lg">
       <h1 className="mb-7 text-4xl font-bold">Posts</h1>
@@ -10,31 +23,19 @@ const Posts = () => {
         Back to Home
       </Link>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <div className="rounded-lg bg-white p-7 shadow-lg">
-          <h2 className="text-2xl font-bold">Post 1</h2>
-          <p className="text-gray-700">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo voluptatem, quibusdam,
-            quos, voluptatum voluptas quod quas voluptates quia doloribus nobis voluptatibus. Quam,
-            voluptate voluptatum. Quod, voluptate? Quisquam, voluptate voluptatum.
-          </p>
-        </div>
-        <div className="rounded-lg bg-white p-7 shadow-lg">
-          <h2 className="text-2xl font-bold">Post 2</h2>
-          <p className="text-gray-700">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo voluptatem, quibusdam,
-            quos, voluptatum voluptas quod quas voluptates quia doloribus nobis voluptatibus. Quam,
-            voluptate voluptatum. Quod, voluptate? Quisquam, voluptate voluptatum.
-          </p>
-        </div>
-        <div className="rounded-lg bg-white p-7 shadow-lg">
-          <h2 className="text-2xl font-bold">Post 3</h2>
-          <p className="text-gray-700">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo voluptatem, quibusdam,
-            quos, voluptatum voluptas quod quas voluptates quia doloribus nobis voluptatibus. Quam,
-            voluptate voluptatum. Quod, voluptate? Quisquam, voluptate voluptatum.
-          </p>
-        </div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {posts.map((post) => (
+          <div key={post.id} className="space-y-4 rounded-lg bg-white p-7 shadow-lg">
+            <div className="flex items-center gap-2">
+              <img src={post.avatar} className="size-10 rounded-full"></img>
+              <h2 className="text-2xl font-bold">
+                {post.firstName} {post.lastName}
+              </h2>
+            </div>
+            <img src={post.image}></img>
+            <p className="text-gray-700">{post.writeup}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
